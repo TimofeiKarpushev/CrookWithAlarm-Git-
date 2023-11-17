@@ -5,8 +5,11 @@ public class Alarm : MonoBehaviour
 {
     [SerializeField] private AudioSource _sound;
     private Coroutine _activateCorotineVolume;
+    private Coroutine _deactivateCorotineVolume;
 
     private float _volume;
+    private float _minVolume;
+    private float _maxVolume;
 
     private void Start()
     {
@@ -15,16 +18,28 @@ public class Alarm : MonoBehaviour
 
     public void PlaySound()
     {
-        _volume = 1f;
+        StopCoroutineBefore();
+        _minVolume = _volume = 1f;
         _sound.Play();
         _activateCorotineVolume = StartCoroutine(ChangeVolume());
     }
 
     public void StopSound()
     {
-        _volume = 0f;
+        StopCoroutineBefore();
+        _maxVolume = _volume = 0f;
         StopCoroutine(_activateCorotineVolume);
         _activateCorotineVolume = StartCoroutine(ChangeVolume());
+    }
+
+    private void StopCoroutineBefore()
+    {
+        if(_deactivateCorotineVolume != null)
+        {
+            StopCoroutine(_deactivateCorotineVolume);
+        }
+
+        _deactivateCorotineVolume = StartCoroutine(ChangeVolume());
     }
 
     private IEnumerator ChangeVolume()

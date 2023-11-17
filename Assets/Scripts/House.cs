@@ -7,14 +7,21 @@ public class House : MonoBehaviour
 {
     [SerializeField] private UnityEvent _entered;
     [SerializeField] private UnityEvent _exit;
+    [SerializeField]private Player _player;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        _entered?.Invoke();
+        if (_player)
+        {
+            _entered.Invoke();
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        _exit?.Invoke();
+        if (_player)
+        {
+            _exit.Invoke();
+        }
     }
 }
